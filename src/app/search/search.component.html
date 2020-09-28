@@ -1,0 +1,51 @@
+<div class="container">
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="m-0">Procurar usuários do GitHub</h5>
+        </div>
+        <div class="card-body">
+            <p>
+                Informe o <strong>username</strong> do GitHub no campo abaixo,
+                para consultar dados do perfil e seus respectivos repositórios.
+            </p>
+
+            <div class="form-group mb-2">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">
+                            <i class="fa fa-github"></i>
+                        </div>
+                    </div>
+                    <input type="text"
+                           class="form-control input-username {{ required ? 'is-invalid' : '' }}"
+                           placeholder="Digite o username e pressione ENTER..."
+                           [(ngModel)]="username"
+                           (keydown)="handlerSearchInput($event)"
+                    >
+                    <div class="input-group-append">
+                        <button type="button"
+                                class="btn btn-dark"
+                                (click)="handlerSearch()"
+                        >
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+                <div *ngIf="required">
+                    <span class="invalid-feedback d-block">{{ required }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="alert alert-danger mb-4" *ngIf="isError">
+        Falha no processamento da requisição, tente novamente.
+    </div>
+
+    <div class="alert alert-info mb-4" *ngIf="isSearch && !user.hasOwnProperty('avatar_url')">
+        Nenhum usuário encontrado.
+    </div>
+
+    <app-user></app-user>
+    <app-repository></app-repository>
+</div>
