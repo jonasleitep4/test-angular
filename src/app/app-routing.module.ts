@@ -8,6 +8,7 @@ const routes: Routes = [
   {path: '', redirectTo: '/search', pathMatch: 'full'},
   {path: 'search', component: SearchComponent},
   {path: 'repository', component: RepositoryComponent},
+  {path: '**', redirectTo: '/search'},
 ];
 
 @NgModule({
