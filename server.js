@@ -17,8 +17,6 @@ app.use(session({
 }));
 
 app.get('/callback', async (req, res) => {
-  console.log('callback--1');
-
   const response = await axios.post(
     'https://github.com/login/oauth/access_token',
     {
@@ -41,12 +39,10 @@ app.get('/callback', async (req, res) => {
 });
 
 app.get('/auth', (req, res) => {
-  console.log('auth--1');
   return res.redirect(`https://github.com/login/oauth/authorize?client_id=${process.env.CLIENT_ID}`);
 });
 
 app.get('/session', (req, res) => {
-  console.log('session--1');
   return res.json(req.session.auth || {});
 });
 
