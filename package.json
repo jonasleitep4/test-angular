@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "start": "node server.js",
-    "postinstall": "ng build --aot --prod",
+    "heroku-postbuild": "ng build --configuration=production",
     "nodemon": "npx nodemon ./server.js localhost 3000",
     "ng": "ng",
     "serve": "ng serve",
