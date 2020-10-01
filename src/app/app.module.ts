@@ -6,8 +6,9 @@ import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client';
 
 import { AppComponent } from './app.component';
 import { SearchComponent } from './search/search.component';
-import { UserComponent } from './user/user.component';
+import { ProfileComponent } from './profile/profile.component';
 import { RepositoryComponent } from './repository/repository.component';
+import { UserComponent } from './user/user.component';
 
 import { DatePtbrPipe } from '../pipes/dateptbr.pipe';
 
@@ -17,8 +18,9 @@ import { AppRoutingModule } from './app-routing.module';
   declarations: [
     AppComponent,
     SearchComponent,
-    UserComponent,
+    ProfileComponent,
     RepositoryComponent,
+    UserComponent,
     DatePtbrPipe,
   ],
   imports     : [

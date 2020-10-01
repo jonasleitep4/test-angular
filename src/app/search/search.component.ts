@@ -8,25 +8,29 @@ import { GithubService } from '../../services/github.service.js';
   styleUrls  : ['./search.component.scss']
 })
 export class SearchComponent {
-  username = null;
-  type     = null;
-  user     = {};
-  repos    = [];
-  isSearch = false;
-  isError  = null;
-  required = null;
+  username     = null;
+  user         = {};
+  repositories = {
+    public : [],
+    starred: [],
+  };
+  isSearch     = false;
+  isError      = null;
+  required     = null;
 
   constructor(public githubService: GithubService, public el: ElementRef) {
     this.setDefaultValues();
   }
 
   setDefaultValues(): void {
-    this.type     = 'public';
-    this.user     = {};
-    this.repos    = [];
-    this.isSearch = false;
-    this.isError  = null;
-    this.required = null;
+    this.user         = {};
+    this.repositories = {
+      public : [],
+      starred: [],
+    };
+    this.isSearch     = false;
+    this.isError      = null;
+    this.required     = null;
   }
 
   async handlerSearch(): Promise<any> {
@@ -39,9 +43,12 @@ export class SearchComponent {
       this.username = this.username.toLowerCase();
 
       try {
-        this.user     = await this.githubService.getUser(this.username) as object;
-        this.repos    = await this.githubService.getRepos(this.username) as object[];
-        this.isSearch = true;
+        this.user         = await this.githubService.getUser(this.username) as object;
+        this.repositories = {
+          public : await this.githubService.getReposPublic(this.username) as object[],
+          starred: await this.githubService.getReposStarred(this.username) as object[],
+        };
+        this.isSearch     = true;
       } catch (e) {
         this.isError = true;
 

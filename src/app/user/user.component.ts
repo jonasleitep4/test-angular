@@ -1,17 +1,37 @@
-import { Component, Inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
-import { SearchComponent } from '../search/search.component';
+import { AuthService } from '../../services/auth.sevices';
+import { GithubService } from '../../services/github.service';
 
 @Component({
   selector   : 'app-user',
   templateUrl: './user.component.html',
   styleUrls  : ['./user.component.scss']
 })
-export class UserComponent {
-  constructor(@Inject(SearchComponent) public parent: SearchComponent) {
+export class UserComponent implements OnInit {
+  user         = {};
+  repositories = {
+    public : [],
+    starred: [],
+  };
+  error        = null;
+
+  constructor(public authService: AuthService, public githubService: GithubService) {
   }
 
-  showValue(value): string {
-    return value ? `<strong>${value}</strong>` : '<small class="text-muted">não informado</small>';
+  async ngOnInit(): Promise<any> {
+    const session = await this.authService.getSession();
+
+    if (!session || !session.access_token) {
+      this.error = 'Falha na autenticação, tente novamente.';
+    } else {
+      this.authService.setToken(session.access_token);
+
+      this.user         = await this.githubService.getAuthUser() as object;
+      this.repositories = {
+        public : await this.githubService.getAuthReposPublic() as object[],
+        starred: await this.githubService.getAuthReposStarred() as object[],
+      };
+    }
   }
 }

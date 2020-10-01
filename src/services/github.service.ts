@@ -1,13 +1,15 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { throwError } from 'rxjs';
-import { retry, catchError } from 'rxjs/operators';
+import { catchError, retry } from 'rxjs/operators';
+
+import { AuthService } from './auth.sevices';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GithubService {
-  constructor(private httpClient: HttpClient) {
+  constructor(private httpClient: HttpClient, public authService: AuthService) {
   }
 
   async getUser(username: string): Promise<any> {
@@ -20,7 +22,7 @@ export class GithubService {
       .toPromise();
   }
 
-  async getRepos(username: string, perPage: number = 10): Promise<any> {
+  async getReposPublic(username: string, perPage: number = 10): Promise<any> {
     return await this.httpClient
       .get(`https://api.github.com/users/${username}/repos?per_page=${perPage}`)
       .pipe(
@@ -30,9 +32,60 @@ export class GithubService {
       .toPromise();
   }
 
-  async getStarred(username: string, perPage: number = 10): Promise<any> {
+  async getReposStarred(username: string, perPage: number = 10): Promise<any> {
     return await this.httpClient
       .get(`https://api.github.com/users/${username}/starred?per_page=${perPage}`)
+      .pipe(
+        retry(2),
+        catchError(this.handleError),
+      )
+      .toPromise();
+  }
+
+  async getAuthUser(): Promise<any> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization : 'bearer ' + this.authService.getToken()
+      })
+    };
+
+    return await this.httpClient
+      .get('https://api.github.com/user', httpOptions)
+      .pipe(
+        retry(2),
+        catchError(this.handleError),
+      )
+      .toPromise();
+  }
+
+  async getAuthReposPublic(perPage: number = 10): Promise<any> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization : 'bearer ' + this.authService.getToken()
+      })
+    };
+
+    return await this.httpClient
+      .get(`https://api.github.com/user/repos?per_page=${perPage}`, httpOptions)
+      .pipe(
+        retry(2),
+        catchError(this.handleError),
+      )
+      .toPromise();
+  }
+
+  async getAuthReposStarred(perPage: number = 10): Promise<any> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization : 'bearer ' + this.authService.getToken()
+      })
+    };
+
+    return await this.httpClient
+      .get(`https://api.github.com/user/starred?per_page=${perPage}`, httpOptions)
       .pipe(
         retry(2),
         catchError(this.handleError),

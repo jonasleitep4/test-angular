@@ -1,6 +1,16 @@
 <nav class="navbar fixed-top navbar-dark bg-dark">
     <div class="container">
-        <div class="navbar-brand">{{title}}</div>
+        <div class="navbar-brand">
+            <a routerLink="/" class="text-white text-decoration-none">{{ title }}</a>
+        </div>
+        <div class="navbar-text">
+            <button type="button"
+                    class="btn bg-white text-dark"
+                    (click)="handlerLogin()"
+            >
+                Entrar
+            </button>
+        </div>
     </div>
 </nav>
 

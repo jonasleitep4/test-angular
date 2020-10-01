@@ -1,12 +1,12 @@
 <div class="container">
     <div class="card mb-4">
         <div class="card-header">
-            <h5 class="m-0">Procurar usuários do GitHub</h5>
+            <h5 class="m-0">Procurar usuário do GitHub</h5>
         </div>
         <div class="card-body">
             <p>
                 Informe o <strong>username</strong> do GitHub no campo abaixo,
-                para consultar dados do perfil e seus respectivos repositórios.
+                para consultar dados do perfil e seus respectivos repositórios públicos.
             </p>
 
             <div class="form-group mb-2">
@@ -46,6 +46,6 @@
         Nenhum usuário encontrado.
     </div>
 
-    <app-user></app-user>
-    <app-repository></app-repository>
+    <app-profile [user]="user"></app-profile>
+    <app-repository [repositories]="repositories"></app-repository>
 </div>

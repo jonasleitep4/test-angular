@@ -1,0 +1,66 @@
+<div class="card mb-4" *ngIf="user.hasOwnProperty('id')">
+    <div class="card-header">
+        <h5 class="mb-0">
+            <a href="{{ user.html_url || '#' }}" target="_blank">
+                {{ user.name || 'Não informado' }}
+            </a>
+        </h5>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-12 col-md-3">
+                <a href="{{ user.html_url }}" target="_blank">
+                    <img src="{{ user.avatar_url }}" class="img-fluid rounded mb-3 mb-md-0">
+                </a>
+            </div>
+            <div class="col-12 col-md-9">
+                <ul class="list-badges-user list-unstyled">
+                    <li>
+                        <span class="badge badge-primary">
+                            Repositórios: {{ user.public_repos }}
+                        </span>
+                    </li>
+                    <li>
+                        <span class="badge badge-secondary">
+                            Gists: {{ user.public_gists }}
+                        </span>
+                    </li>
+                    <li>
+                        <span class="badge badge-success">
+                            Seguidores: {{ user.followers }}
+                        </span>
+                    </li>
+                    <li>
+                        <span class="badge badge-info">
+                            Seguindo: {{ user.following }}
+                        </span>
+                    </li>
+                </ul>
+
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        Empresa: <span [innerHTML]="showValue(user.company)"></span>
+                    </li>
+                    <li class="list-group-item">
+                        <span *ngIf="user.email">
+                            E-mail: <span [innerHTML]="showValue(user.email)"></span>
+                        </span>
+                        <span *ngIf="!user.email">
+                            Site: <span [innerHTML]="showValue(user.blog)"></span>
+                        </span>
+                    </li>
+                    <li class="list-group-item">
+                        Localização: <span [innerHTML]="showValue(user.location)"></span>
+                    </li>
+                    <li class="list-group-item">
+                        Data do cadastro: <span [innerHTML]="showValue(user.created_at | datePtbr)"></span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <p class="mb-0 pt-3 text-muted" *ngIf="user.bio">
+            {{ user.bio }}
+        </p>
+    </div>
+</div>

@@ -1,6 +1,4 @@
-import { Component, Inject } from '@angular/core';
-
-import { SearchComponent } from '../search/search.component';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector   : 'app-repository',
@@ -8,29 +6,18 @@ import { SearchComponent } from '../search/search.component';
   styleUrls  : ['./repository.component.scss']
 })
 export class RepositoryComponent {
-  reposPublic  = [];
-  reposStarred = [];
-
-  constructor(
-    @Inject(SearchComponent) public parent: SearchComponent
-  ) {
+  @Input()
+  set repositories(value: any) {
+    this.cache = value;
+    this.repos = value.public;
   }
 
-  async handlerToggleType(type): Promise<any> {
-    this.parent.type = type;
+  type  = 'public';
+  cache = {};
+  repos = [];
 
-    if (type === 'starred') {
-      if (!this.reposStarred.length) {
-        this.reposStarred = await this.parent.githubService.getStarred(this.parent.username) as object[];
-      }
-
-      this.parent.repos = this.reposStarred;
-    } else {
-      if (!this.reposPublic.length) {
-        this.reposPublic = await this.parent.githubService.getRepos(this.parent.username) as object[];
-      }
-
-      this.parent.repos = this.reposPublic;
-    }
+  handlerToggleType(type: string): any {
+    this.type  = type;
+    this.repos = this.cache[type];
   }
 }
